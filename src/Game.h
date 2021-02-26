@@ -2,8 +2,8 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
-#include <SLD2/SLD_image.h>
-#include <SLD2/SLD_ttf.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 class Game {
     private:
