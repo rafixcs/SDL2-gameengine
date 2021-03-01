@@ -5,6 +5,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <iostream>
+
 class Game {
     private:
         bool isRunning;
@@ -22,6 +24,8 @@ class Game {
         
         bool getIsRunning() const;
         
+    public:
+        int ticksLastFrame = 0;
 };
 
 #endif
