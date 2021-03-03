@@ -1,6 +1,7 @@
 #include <iostream>
 #include "./Constants.h"
 #include "./Game.h"
+#include "../lib/glm/glm.hpp"
 
 Game::Game() {
     this->isRunning = false;
@@ -14,10 +15,8 @@ bool Game::getIsRunning() const {
     return this->isRunning;
 }
 
-float projectilePosX = 0.0f;
-float projectilePosY = 0.0f;
-float projectileVelX = 10.5f;
-float projectileVelY = 10.5f;
+glm::vec2 projPos = glm::vec2(0.0f, 0.0f);
+glm::vec2 projVel = glm::vec2(20.0f, 20.0f);
 
 void Game::Initialize(int width, int heigth) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -73,7 +72,14 @@ void Game::ProcessInput() {
 
 void Game::Update() {
     // Wait until 16ms has ellapsed since the last frame
-    while(!SDL_TICKS_PASSED(SDL_GetTicks(), ticksLastFrame + FRAME_TARGET_TIME));
+    
+    // Using while loop waste CPU usage
+    //**while(!SDL_TICKS_PASSED(SDL_GetTicks(), ticksLastFrame + FRAME_TARGET_TIME));**
+    
+    // More eficient way to wait for the right time step
+    int timeToWait = FRAME_TARGET_TIME - (SDL_GetTicks() - this->ticksLastFrame);
+    if (timeToWait > 0 && timeToWait <= FRAME_TARGET_TIME)
+        SDL_Delay(timeToWait);
 
     // Delta time is the difference in ticks from last frame converted to seconds
     float deltaTime = (SDL_GetTicks() - this->ticksLastFrame) / 1000.0f;
@@ -81,12 +87,14 @@ void Game::Update() {
     // Sets the new ticks for the current frame to be used in the next pass
     this->ticksLastFrame = SDL_GetTicks();
 
-    std::cout << "deltaTime: " << deltaTime << std::endl;
-
     deltaTime = (deltaTime > 0.05f) ? 0.05f : deltaTime;
 
-    projectilePosX += projectileVelX * deltaTime;
-    projectilePosY += projectileVelY * deltaTime;
+    // Use deltaTime to update my game objects
+    projPos = glm::vec2(
+        projPos.x + projVel.x * deltaTime,
+        projPos.y + projVel.y * deltaTime
+    );
+    
 }
 
 void Game::Render() {
@@ -94,8 +102,8 @@ void Game::Render() {
     SDL_RenderClear(this->renderer);
 
     SDL_Rect proj {
-        (int) projectilePosX,
-        (int) projectilePosY,
+        static_cast<int>(projPos.x),
+        static_cast<int>(projPos.y),
         10,
         10
     };
