@@ -4,9 +4,9 @@
 #include <vector>
 #include <string>
 #include "./Component.h"
+#include "./EntityManager.h"
 
 class EntityManager;
-//class Component;
 
 class Entity {
     private:
@@ -22,6 +22,9 @@ class Entity {
         void Render();
         void Destroy();
         bool IsActive() const;
+
+        template <typename T, typename... TArgs>
+        T& AddComponent(TArgs&&... args);
 
 };
 

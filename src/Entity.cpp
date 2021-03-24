@@ -27,3 +27,13 @@ void Entity::Destroy() {
 bool Entity::IsActive() const {
     return this->isActive;
 }
+
+template <typename T, typename... TArgs>
+T& Entity::AddComponent(TArgs&&... args) {
+    T* newComponent(new T(std::forward<TArgs>(args)...));
+
+    newComponent->owner = this;
+    components.emplace_back(newComponent);
+    newComponent->Intialize();
+    return *newComponent;
+}

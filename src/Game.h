@@ -10,7 +10,6 @@ class Game {
     private:
         bool isRunning;
         SDL_Window *window;
-        SDL_Renderer *renderer;
     public:
         Game();
         ~Game();
@@ -20,11 +19,13 @@ class Game {
         void Update();
         void Render();
         void Destroy();
+        void LoadLevel(int levelNumber);
         
         bool getIsRunning() const;
         
     public:
         int ticksLastFrame = 0;
+        static SDL_Renderer *renderer;
 };
 
 #endif
