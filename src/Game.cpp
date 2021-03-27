@@ -54,19 +54,21 @@ void Game::Initialize(int width, int heigth) {
 
     this->isRunning = true;
 
+    LoadLevel(0);
+
     return;
 }
 
 void Game::LoadLevel(int levelNumber) {
     /* Start including new assets to the assetManager list */
-    std::string textureFilePath = "./asstes/images/tank-big-right.png";
+    std::string textureFilePath = "./assets/images/tank-big-right.png";
     assetManager->AddTexture("tank-image", textureFilePath.c_str());
 
 
     /* Start including entities and also components to them */
     Entity& newEntity(manager.AddEntity("tank"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
-    //newEntity.AddComponent<SpriteComponent>("tank-image");
+    newEntity.AddComponent<SpriteComponent>("tank-image");
 }
 
 void Game::ProcessInput() {
@@ -110,6 +112,7 @@ void Game::Update() {
 
     // TODO:
     // Herer we call the manager.update to update all entities as function of deltaTime
+    manager.Update(deltaTime);
     
     
 }
@@ -120,6 +123,7 @@ void Game::Render() {
 
     // TODO:
     // Here we call the manager.render to render all entities
+    manager.Render();
 
     SDL_RenderPresent(this->renderer);
 

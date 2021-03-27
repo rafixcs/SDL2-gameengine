@@ -27,19 +27,3 @@ void Entity::Destroy() {
 bool Entity::IsActive() const {
     return this->isActive;
 }
-
-template <typename T, typename... TArgs>
-T& Entity::AddComponent(TArgs&&... args) {
-    T* newComponent(new T(std::forward<TArgs>(args)...));
-    newComponent->owner = this;
-    components.emplace_back(newComponent);
-    this->componentTypeMap[&typeid(*newComponent)] = newComponent;
-    newComponent->Intialize();
-    return *newComponent;
-}
-
-
-template <typename T>
-T* Entity::GetComponent() {
-    return static_cast<T*>(componentTypeMap[&typeid(T)]);
-}
