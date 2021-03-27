@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "./Component.h"
 #include "./EntityManager.h"
 
@@ -13,7 +14,7 @@ class Entity {
         EntityManager& manager;
         bool isActive;
         std::vector<Component*> components;
-
+        std::map<const std::type_info*, Component*> componentTypeMap;
     public:
         std::string name;
         Entity(EntityManager& manager);
@@ -25,6 +26,9 @@ class Entity {
 
         template <typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args);
+
+        template <typename T>
+        T* GetComponent();
 
 };
 

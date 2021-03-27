@@ -14,9 +14,9 @@ class TransformComponent: public Component {
 
         TransformComponent(int posX, int posY, int velX, int velY, int h, int w, int s);
 
-    void Initialize() override;
-    void Update(float deltaTime) override;
-    void Render() override;
+        void Initialize() override;
+        void Update(float deltaTime) override;
+        void Render() override;
 
 
 };

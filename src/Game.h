@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+class AssetManager;
 
 class Game {
     private:
@@ -26,6 +27,7 @@ class Game {
     public:
         int ticksLastFrame = 0;
         static SDL_Renderer *renderer;
+        static AssetManager* assetManager;
 };
 
 #endif
