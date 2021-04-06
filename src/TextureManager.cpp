@@ -2,7 +2,6 @@
 #include <iostream>
 
 SDL_Texture* TextureManager::LoadTexture(const char* fileName) {
-    //std::cout << "File name" << fileName << std::endl;
     
     SDL_Surface* surface = IMG_Load(fileName);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);

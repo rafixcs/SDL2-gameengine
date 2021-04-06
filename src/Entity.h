@@ -4,8 +4,12 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iostream>
+#include <boost/type_index.hpp>
 #include "./Component.h"
 #include "./EntityManager.h"
+
+#define PRINT_NEWCOMPONENT 1
 
 class EntityManager;
 
@@ -27,16 +31,30 @@ class Entity {
         template <typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args) {
             T* newComponent(new T(std::forward<TArgs>(args)...));
+            
             newComponent->owner = this;
+            
             components.emplace_back(newComponent);
             this->componentTypeMap[&typeid(*newComponent)] = newComponent;
+            
             newComponent->Initialize();
+            
+            #if PRINT_NEWCOMPONENT
+                PrintComponentName(newComponent);
+            #endif
+            
             return *newComponent;
         }
 
         template <typename T>
         T* GetComponent() {
             return static_cast<T*>(componentTypeMap[&typeid(T)]);
+        }
+        
+        template <typename T>
+        void PrintComponentName(T component) {
+            std::cout << "Entity: " << this->name << std::endl;
+            std::cout << "\tNew component <" << boost::typeindex::type_id<T>().pretty_name() << ">" << std::endl;
         }
 
 };

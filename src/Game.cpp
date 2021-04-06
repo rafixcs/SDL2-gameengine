@@ -69,6 +69,15 @@ void Game::LoadLevel(int levelNumber) {
     Entity& newEntity(manager.AddEntity("tank"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     newEntity.AddComponent<SpriteComponent>("tank-image");
+
+    Entity& newEntity1(manager.AddEntity("tank1"));
+    newEntity1.AddComponent<TransformComponent>(0, WINDOW_HEIGHT/2, 20, 0, 32, 32, 1);
+    newEntity1.AddComponent<SpriteComponent>("tank-image");
+
+
+    Entity& newEntity2(manager.AddEntity("tank2"));
+    newEntity2.AddComponent<TransformComponent>(WINDOW_WIDTH-32, WINDOW_HEIGHT-32, -20, -10, 32, 32, 1);
+    newEntity2.AddComponent<SpriteComponent>("tank-image");
 }
 
 void Game::ProcessInput() {
