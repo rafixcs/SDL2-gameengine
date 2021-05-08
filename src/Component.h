@@ -10,7 +10,6 @@ class Component {
         virtual void Initialize() {}
         virtual void Update(float deltaTime) {}
         virtual void Render() {}
-
 };
 
 #endif

@@ -6,8 +6,6 @@ int main(int argc, char *argv[]) {
 
     game.Initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    game.LoadLevel(0);
-
     while(game.getIsRunning()) {
         game.ProcessInput();
         game.Update();

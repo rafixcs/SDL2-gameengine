@@ -9,7 +9,7 @@
 #include "./Component.h"
 #include "./EntityManager.h"
 
-#define PRINT_NEWCOMPONENT 1
+#define PRINT_NEWCOMPONENT 0
 
 class EntityManager;
 
@@ -55,6 +55,11 @@ class Entity {
         void PrintComponentName(T component) {
             std::cout << "Entity: " << this->name << std::endl;
             std::cout << "\tNew component <" << boost::typeindex::type_id<T>().pretty_name() << ">" << std::endl;
+        }
+
+        template <typename T>
+        bool HasComponent() const {
+            return componentTypeMap.count(&typeid(T));
         }
 
 };
