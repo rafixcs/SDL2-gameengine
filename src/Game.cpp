@@ -37,7 +37,7 @@ void Game::Initialize(int width, int heigth) {
         SDL_WINDOWPOS_CENTERED,
         width,
         heigth,
-        SDL_WINDOW_BORDERLESS
+        SDL_WINDOW_SHOWN
     );
 
     if (!this->window) {
@@ -78,7 +78,6 @@ void Game::LoadLevel(int levelNumber) {
     Entity& radarEntity(manager.AddEntity("radar"));
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
-
 }
 
 void Game::ProcessInput() {

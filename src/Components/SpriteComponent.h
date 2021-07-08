@@ -46,6 +46,11 @@ class SpriteComponent : public Component {
             this->animationSpeed = animationSpeed;
             this->hasDirection = hasDirection;
 
+            if (owner->debugMode) {
+                std::cout << "Number of frames in the constructor: " << numFrames << std::endl;
+            }
+
+
             if (this->hasDirection) {
                 Animation downAnimation = Animation(0, numFrames, animationSpeed);
                 Animation rightAnimation = Animation(1, numFrames, animationSpeed);
@@ -60,14 +65,14 @@ class SpriteComponent : public Component {
                 this->animationIndex = 0;
                 this->currentAnimationName = "DownAnimation";
             } else {
-                Animation singleAnimation = Animation(0, this->numFrames, this->animationSpeed);
+                Animation singleAnimation = Animation(0, numFrames, animationSpeed);
                 this->animations.emplace("SingleAnimation", singleAnimation);
                 this->animationIndex = 0;
                 this->currentAnimationName = "SingleAnimation";
             }
 
             Play(this->currentAnimationName);            
-            this->SetTexture(filePath);
+            this->SetTexture(std::string(filePath));
         }        
 
         void Play(std::string animationName) {
@@ -91,7 +96,14 @@ class SpriteComponent : public Component {
 
         void Update(float deltaTime) override {
             if (this->isAnimated) {
-                this->srcRect.x = this->srcRect.w * static_cast<int>((SDL_GetTicks() / this->animationSpeed) % this->numFrames);
+                try {
+                    if(owner->debugMode)
+                        std::cout << "Number of frames " << this->numFrames << std::endl;
+                    this->srcRect.x = this->srcRect.w * static_cast<int>((SDL_GetTicks() / this->animationSpeed) % this->numFrames);
+                }
+                catch (const std::exception& e) {
+                    std::cerr << "Update texture error: " << e.what() << std::endl;
+                }
             }
             //std::cout << "src x: " << this->srcRect.x << "\tspeed: " << this->animationSpeed  << "\tnumFrames: " << this->numFrames << std::endl;
             this->srcRect.y = this->animationIndex * this->transform->height;

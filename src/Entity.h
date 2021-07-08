@@ -9,7 +9,7 @@
 #include "./Component.h"
 #include "./EntityManager.h"
 
-#define PRINT_NEWCOMPONENT 0
+#define PRINT_NEWCOMPONENT 1
 
 class EntityManager;
 
@@ -21,13 +21,17 @@ class Entity {
         std::map<const std::type_info*, Component*> componentTypeMap;
     public:
         std::string name;
+        bool debugMode;
+    
+    public:
         Entity(EntityManager& manager);
         Entity(EntityManager& manager, std::string name);
         void Update(float deltaTime);
         void Render();
         void Destroy();
         bool IsActive() const;
-
+    
+    public:
         template <typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args) {
             T* newComponent(new T(std::forward<TArgs>(args)...));
