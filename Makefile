@@ -1,3 +1,8 @@
+ALL = clean build run
+
+
+all: $(ALL)
+
 build:
 	g++ -w -std=c++14 -Wfatal-errors \
 	./src/*.cpp \
