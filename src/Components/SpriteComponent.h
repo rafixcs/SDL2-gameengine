@@ -123,6 +123,10 @@ class SpriteComponent : public Component {
 
             TextureManager::Draw(this->texture, this->srcRect, this->dstRect, spriteFlip);
         }
+
+        SDL_Rect GetSrcRectangle() {
+            return this->srcRect;
+        }
 };
 
 #endif
