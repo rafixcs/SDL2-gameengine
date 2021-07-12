@@ -10,7 +10,7 @@
 EntityManager manager;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager = new AssetManager(&manager);
-
+SDL_Event Game::event;
 
 Game::Game() {
     this->isRunning = false;
@@ -81,7 +81,6 @@ void Game::LoadLevel(int levelNumber) {
 }
 
 void Game::ProcessInput() {
-    SDL_Event event;
     SDL_PollEvent(&event);
 
     switch (event.type)
