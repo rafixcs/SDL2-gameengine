@@ -1,18 +1,18 @@
-#ifndef COLLISIONSPRITECOMPONENT_H
-#define COLLISIONSPRITECOMPONENT_H
+#ifndef WINDOWCOLLIDER_H
+#define WINDOWCOLLIDER_H
 
 #include "../Component.h"
 #include "../Game.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 
-class CollisionSpriteComponent: public Component {
+class WindowCollider: public Component {
     private:
         TransformComponent *transform;
         SpriteComponent *sprite;
 
     public:
-        CollisionSpriteComponent() {
+        WindowCollider() {
 
         }
 

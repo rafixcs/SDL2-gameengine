@@ -6,7 +6,7 @@
 #include "./Components/TransformComponent.h"
 #include "./Components/SpriteComponent.h"
 #include "./Components/KeyboardControlComponents.h"
-#include "./Components/CollisionSpriteComponent.h"
+#include "./Components/WindowCollider.h"
 #include "./AssetManager.h"
 
 EntityManager manager;
@@ -77,7 +77,7 @@ void Game::LoadLevel(int levelNumber) {
     chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopperEntity.AddComponent<KeyboardControlComponent>("up", "down", "right", "left", "space");
-    chopperEntity.AddComponent<CollisionSpriteComponent>();
+    chopperEntity.AddComponent<WindowCollider>();
 
     Entity& radarEntity(manager.AddEntity("radar"));
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
