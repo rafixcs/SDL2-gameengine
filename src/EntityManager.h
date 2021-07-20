@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "./Entity.h"
+#include "./Constants.h"
 
 class EntityManager {
     private:
@@ -11,10 +12,12 @@ class EntityManager {
         void Update(float deltaTime);
         void Render();
         bool HasNoEntities();
-        Entity& AddEntity(std::string entityName);
+        Entity& AddEntity(std::string entityName, LayerType layer);
         void ClearData();
         std::vector<Entity*> GetEntities() const;
-        unsigned int GetEntityCount();      
+        std::vector<Entity*> GetEntitiesByLayer(LayerType layer) const;
+        unsigned int GetEntityCount();
+        CollisionType CheckCollisions() const;
 
 };
 

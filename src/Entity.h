@@ -8,8 +8,9 @@
 #include <boost/type_index.hpp>
 #include "./Component.h"
 #include "./EntityManager.h"
+#include "./Constants.h"
 
-#define PRINT_NEWCOMPONENT 1
+#define PRINT_NEWCOMPONENT 0
 
 class EntityManager;
 
@@ -19,13 +20,15 @@ class Entity {
         bool isActive;
         std::vector<Component*> components;
         std::map<const std::type_info*, Component*> componentTypeMap;
+    
     public:
         std::string name;
         bool debugMode;
-    
+        LayerType layer;
+
     public:
         Entity(EntityManager& manager);
-        Entity(EntityManager& manager, std::string name);
+        Entity(EntityManager& manager, std::string name, LayerType layer);
         void Update(float deltaTime);
         void Render();
         void Destroy();

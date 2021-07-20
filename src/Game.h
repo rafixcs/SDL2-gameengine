@@ -21,7 +21,12 @@ class Game {
         void Render();
         void Destroy();
         void LoadLevel(int levelNumber);
-        
+        void HandleCameraMovement();
+        void CheckCollisions();
+        void ProcessNextLevel(int levelNumber);
+        void ProcessGameOver();
+
+    public:
         bool getIsRunning() const;
         
     public:
@@ -29,6 +34,7 @@ class Game {
         static SDL_Renderer *renderer;
         static AssetManager* assetManager;
         static SDL_Event event;
+        static SDL_Rect camera; 
 };
 
 #endif

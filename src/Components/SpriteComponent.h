@@ -46,11 +46,6 @@ class SpriteComponent : public Component {
             this->animationSpeed = animationSpeed;
             this->hasDirection = hasDirection;
 
-            if (owner->debugMode) {
-                std::cout << "Number of frames in the constructor: " << numFrames << std::endl;
-            }
-
-
             if (this->hasDirection) {
                 Animation downAnimation = Animation(0, numFrames, animationSpeed);
                 Animation rightAnimation = Animation(1, numFrames, animationSpeed);
@@ -97,8 +92,9 @@ class SpriteComponent : public Component {
         void Update(float deltaTime) override {
             if (this->isAnimated) {
                 try {
-                    if(owner->debugMode)
+                    if(owner->debugMode) {
                         std::cout << "Number of frames " << this->numFrames << std::endl;
+                    }
                     this->srcRect.x = this->srcRect.w * static_cast<int>((SDL_GetTicks() / this->animationSpeed) % this->numFrames);
                 }
                 catch (const std::exception& e) {
@@ -108,8 +104,8 @@ class SpriteComponent : public Component {
             //std::cout << "src x: " << this->srcRect.x << "\tspeed: " << this->animationSpeed  << "\tnumFrames: " << this->numFrames << std::endl;
             this->srcRect.y = this->animationIndex * this->transform->height;
 
-            this->dstRect.x = static_cast<int>(transform->position.x);
-            this->dstRect.y = static_cast<int>(transform->position.y);
+            this->dstRect.x = static_cast<int>(transform->position.x) - (isFixed ? 0 : Game::camera.x);
+            this->dstRect.y = static_cast<int>(transform->position.y) - (isFixed ? 0 : Game::camera.y);
             this->dstRect.w = transform->width * transform->scale;
             this->dstRect.h = transform->height * transform->scale;
         }
