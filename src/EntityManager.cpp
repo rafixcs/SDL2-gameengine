@@ -13,6 +13,14 @@ void EntityManager::ClearData() {
     }
 }
 
+void EntityManager::DestroyInactiveEntity() {
+    for (int i = 0; i < entities.size(); i++) {
+        if (!entities[i]->IsActive()) {
+            entities.erase(entities.begin() + i);
+        }
+    }
+}
+
 bool EntityManager::HasNoEntities() {
     return entities.size() == 0;
 }
