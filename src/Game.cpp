@@ -103,6 +103,131 @@ void Game::LoadLevel(int levelNumber) {
         assetIndex++;
     }
 
+    /******************************************************************/
+    /* LOADS ENTITIES AND COMPONENTS FROM LUA CONFIG FILE            */
+    /****************************************************************/
+    sol::table levelEntities = levelData["entities"];
+
+    unsigned int entityIndex = 0;
+    while(true) {
+        sol::optional<sol::table> existsEntityIndexNode = levelEntities[entityIndex];
+        if (existsEntityIndexNode == sol::nullopt) {
+            break;
+        } else {
+            sol::table entity = levelEntities[entityIndex];
+            
+            std::string nameEntity = entity["name"];
+            LayerType layerEntity = static_cast<LayerType>(static_cast<int>(entity["layer"]));
+            sol::table components = entity["components"];
+            
+            // Creating a new entity
+            Entity& newEntity(manager.AddEntity(nameEntity, layerEntity));
+
+            // Add transform component
+            sol::optional<sol::table> existTransform = components["transform"];
+            if (existTransform != sol::nullopt) {
+                newEntity.AddComponent<TransformComponent>(
+                    static_cast<int>(components["transform"]["position"]["x"]),
+                    static_cast<int>(components["transform"]["position"]["y"]),
+                    static_cast<int>(components["transform"]["velocity"]["x"]),
+                    static_cast<int>(components["transform"]["velocity"]["y"]),
+                    static_cast<int>(components["transform"]["width"]),
+                    static_cast<int>(components["transform"]["height"]),
+                    static_cast<int>(components["transform"]["scale"])
+                );
+            }
+
+            sol::optional<sol::table> existSprite = components["sprite"];
+            if (existSprite != sol::nullopt) {
+                std::string textureId = components["sprite"]["textureAssetId"];
+                bool isAnimated = components["sprite"]["animated"];
+                if (isAnimated) {
+                    newEntity.AddComponent<SpriteComponent>(
+                        textureId.c_str(),
+                        static_cast<int>(components["sprite"]["frameCount"]),
+                        static_cast<int>(components["sprite"]["animationSpeed"]),
+                        static_cast<bool>(components["sprite"]["hasDirections"]),
+                        static_cast<bool>(components["sprite"]["fixed"])
+                    );
+                } else {
+                    newEntity.AddComponent<SpriteComponent>(textureId.c_str());
+                }
+            }
+
+            sol::optional<sol::table> existCollider = components["collider"];
+            if (existCollider != sol::nullopt) {
+                std::string colliderTag  = components["collider"]["tag"];
+                newEntity.AddComponent<ColliderComponent>(
+                    colliderTag,
+                    static_cast<int>(components["transform"]["position"]["x"]),
+                    static_cast<int>(components["transform"]["position"]["y"]),
+                    static_cast<int>(components["transform"]["width"]),
+                    static_cast<int>(components["transform"]["height"])
+                );
+            }
+
+            sol::optional<sol::table> existInput = components["input"];
+            if (existInput != sol::nullopt) {
+                sol::optional<sol::table> existsKeyboardInputComponent = components["input"]["keyboard"];
+                if (existsKeyboardInputComponent != sol::nullopt) {
+                    std::string upkey = components["input"]["keyboard"]["up"];
+                    std::string rightkey = components["input"]["keyboard"]["right"];
+                    std::string downkey = components["input"]["keyboard"]["down"];
+                    std::string leftkey = components["input"]["keyboard"]["left"];
+                    std::string shootkey = components["input"]["keyboard"]["shoot"];
+                    newEntity.AddComponent<KeyboardControlComponent>(upkey, downkey, rightkey, leftkey, shootkey);
+                }
+            } 
+
+            sol::optional<sol::table> existProjectileEmitter = components["projectileEmitter"];
+            if (existProjectileEmitter != sol::nullopt) {
+                 int parentEntityXPos = entity["components"]["transform"]["position"]["x"];
+                int parentEntityYPos = entity["components"]["transform"]["position"]["y"];
+                int parentEntityWidth = entity["components"]["transform"]["width"];
+                int parentEntityHeight = entity["components"]["transform"]["height"];
+                int projectileWidth = entity["components"]["projectileEmitter"]["width"];
+                int projectileHeight = entity["components"]["projectileEmitter"]["height"];
+                int projectileSpeed = entity["components"]["projectileEmitter"]["speed"];
+                int projectileRange = entity["components"]["projectileEmitter"]["range"];
+                int projectileAngle = entity["components"]["projectileEmitter"]["angle"];
+                bool projectileShouldLoop = entity["components"]["projectileEmitter"]["shouldLoop"];
+                std::string textureAssetId = entity["components"]["projectileEmitter"]["textureAssetId"];
+                Entity& projectile(manager.AddEntity("projectile", PROJECTILE_LAYER));
+                projectile.AddComponent<TransformComponent>(
+                    parentEntityXPos + (parentEntityWidth / 2),
+                    parentEntityYPos + (parentEntityHeight / 2),
+                    0,
+                    0,
+                    projectileWidth,
+                    projectileHeight,
+                    1
+                );
+                projectile.AddComponent<SpriteComponent>(textureAssetId.c_str());
+                projectile.AddComponent<ProjectileEmitterComponent>(
+                    projectileSpeed,
+                    projectileAngle,
+                    projectileRange,
+                    projectileShouldLoop
+                );
+                projectile.AddComponent<ColliderComponent>(
+                    "PROJECTILE",
+                    parentEntityXPos,
+                    parentEntityYPos,
+                    projectileWidth,
+                    projectileHeight
+                );
+            } 
+
+            sol::optional<sol::table> existTextLabel = components["textLabel"];
+            if (existTextLabel !=  sol::nullopt) {
+                // TODO:...
+            }
+        }
+        entityIndex++;
+    }
+
+    player = manager.GetEntityByName("player");
+
     /*********************************************/
     /* LOADS MAP FROM LUA CONFIG FILE            */
     /*********************************************/

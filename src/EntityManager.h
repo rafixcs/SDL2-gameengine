@@ -24,6 +24,7 @@ class EntityManager {
         unsigned int GetEntityCount();
         std::vector<Entity*> GetEntities() const;
         std::vector<Entity*> GetEntitiesByLayer(LayerType layer) const;
+        Entity* GetEntityByName(std::string name) const;
     
     public:    
         CollisionType CheckCollisions() const;
